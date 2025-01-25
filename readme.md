@@ -70,7 +70,9 @@ python3 kafka_python_producer.py
 
 Click `Home` > `Environment (Select the environment)` > `Cluster` > `Topics` > `Messages` to see if the messages are all pushed to the related Kafka Topic:
 
-![1737817162343](image/readme/1737817162343.png)
+
+![ScreenShot_20250125_155820@2x](https://github.com/user-attachments/assets/4c0c4a28-ae5c-48c2-b58b-feb890be5799)
+
 
 It is also important to compare the data in the raw dataset with the ones published into the topic, to make sure all the required data is there in the topic.
 
