@@ -104,7 +104,6 @@ To open the workspace for executing FlinkSQL queries, click to **Query with Flin
      COUNT(*) AS daily_view_count,
      SUM(duration) AS daily_total_watch_time
    FROM `default`.`kafka_naci`.`netflix-uk-views`
-     WHERE `title` = 'Creed'
    GROUP BY
      title,
      SUBSTR(`datetime`, 1, 10);
