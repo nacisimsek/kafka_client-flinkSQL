@@ -1,9 +1,9 @@
 SELECT
   title,
-  SUBSTR(`datetime`, 1, 10) AS view_date,
+  DATE_FORMAT(datetime, 'yyyy-MM-dd') AS date_day,
   COUNT(*) AS daily_view_count,
   SUM(duration) AS daily_total_watch_time
 FROM `default`.`kafka_naci`.`netflix-uk-views`
+  WHERE `duration` > 0
 GROUP BY
-  title,
-  SUBSTR(`datetime`, 1, 10);
+  title,DATE_FORMAT(datetime, 'yyyy-MM-dd');
