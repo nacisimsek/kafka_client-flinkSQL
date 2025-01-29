@@ -30,7 +30,16 @@ Here are the essential configuration parameters:
 
 You can fill these parameter values based on your setup. If you setup production pipelines, you may consider [other ways](https://docs.confluent.io/cloud/current/security/authenticate/overview.html) to pass such sensitive parameters to your cluster.
 
-## 3. Create a Producer and Execute
+## 3. Analyze the Dataset
+
+Before processing the dataset and push it to a Kafka topic, make sure to perform basic check on the data, which is listed as follows:
+
+* **Data Profile:** Analyze data for nulls, types, and inconsistencies.
+* **Schema Design:** Define Avro schema, especially for date/time fields, precisions, etc...
+* **Clean & Transform:** Handle missing/invalid data; normalize timezones.
+* **Verify Kafka:** Check data in Kafka topic for correctness.
+
+## 4. Create a Producer and Execute
 
 There are several ways to create a producer to produce events to your Kafka Cluster. See [here](https://docs.confluent.io/cloud/current/get-started/index.html#step-3-create-a-sample-producer "Create a sample producer") for more information.
 
@@ -66,17 +75,15 @@ pip install "confluent-kafka[avro]"
 python3 kafka_python_producer.py
 ```
 
-## 4. Check Confluent Cloud UI to Verify the Messages on Topic
+## 5. Check Confluent Cloud UI to Verify the Messages on Topic
 
 Click `Home` > `Environment (Select the environment)` > `Cluster` > `Topics` > `Messages` to see if the messages are all pushed to the related Kafka Topic:
 
-
 ![ScreenShot_20250125_155820@2x](https://github.com/user-attachments/assets/4c0c4a28-ae5c-48c2-b58b-feb890be5799)
-
 
 It is also important to compare the data in the raw dataset with the ones published into the topic, to make sure all the required data is there in the topic.
 
-## 5. Perform Analytical Queries on Kafka Topic
+## 6. Perform Analytical Queries on Kafka Topic
 
 We can now perform analytical queries on our Kafka topic by using **Flink streaming**. By executing FlinkSQL queries on Kafka topic, Flink will perform. real-time aggregations and calculations to generate the required data.
 
@@ -100,11 +107,11 @@ To open the workspace for executing FlinkSQL queries, click to **Query with Flin
    ```sql
    SELECT
      title,
-     SUBSTR(`datetime`, 1, 10) AS view_date,
+     DATE_FORMAT(datetime, 'yyyy-MM-dd') AS date_day,
      COUNT(*) AS daily_view_count,
      SUM(duration) AS daily_total_watch_time
    FROM `default`.`kafka_naci`.`netflix-uk-views`
+     WHERE `duration` > 0
    GROUP BY
-     title,
-     SUBSTR(`datetime`, 1, 10);
+     title,DATE_FORMAT(datetime, 'yyyy-MM-dd');
    ```
